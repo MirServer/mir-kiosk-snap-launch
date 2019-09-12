@@ -22,7 +22,7 @@ apps:
     daemon: simple
     ...
 
-  mir-kiosk-scummvm:
+  mir-kiosk-XXX:
     command: wayland-launch XXX
     ...
 ```
