@@ -7,11 +7,12 @@ Sprinkle this in your mir-kiosk-XXX snap/snapcraft.yaml
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
     override-build: |
+      sed --in-place s'/%SNAP%/$SNAPCRAFT_PROJECT_NAME/' $SNAPCRAFT_PART_BUILD/bin/setup.sh
       sed --in-place s'/%PLUGS%/opengl pulseaudio wayland/' $SNAPCRAFT_PART_BUILD/bin/setup.sh
       snapcraftctl build
 ```
 
-Where you put the plugs you need for your snap in the `sed` command.
+Where you put the plugs you need for your snap in the `sed...%PLUGS%...` command.
 
 You use this to launch your app as follows:
 
