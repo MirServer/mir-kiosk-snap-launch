@@ -1,6 +1,12 @@
 #!/bin/sh
 
-set -x
+if [ ! -e $SNAP_COMMON/wayland.connected ]; then
+  echo "ERROR: You need to connect the wayland interface."
+  echo ""
+  echo "To connect the wayland (and other) interfaces used by this snap:"
+  echo "  /snap/"$SNAP_INSTANCE_NAME"/current/bin/setup.sh"
+  exit 1
+fi
 
 mkdir -p "$XDG_RUNTIME_DIR" -m 700
 
