@@ -2,7 +2,7 @@
 
 set -x
 
-if grep -q snap_core= /proc/cmdline || [ "$(snapctl get daemon)" = "true" ]
+if [ "$(snapctl get daemon)" = "true" ]
 then exec "$@"
 else snapctl stop $SNAP_NAME.daemon
 fi
