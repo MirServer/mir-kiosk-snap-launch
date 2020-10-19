@@ -2,8 +2,19 @@
 
 set -x
 
+if ! snapctl is-connected wayland
+then
+  echo "Wayland interface not connected!"
+  exit 1
+fi
+
 real_wayland=$(dirname "$XDG_RUNTIME_DIR")/${WAYLAND_DISPLAY:-wayland-0}
-while [ ! -O "${real_wayland}" ]; do echo waiting for Wayland socket; sleep 4; done
+
+while [ ! -O "${real_wayland}" ]
+do
+  echo waiting for Wayland socket
+  inotifywait --event create $(dirname "${real_wayland}") || sleep 4
+done
 
 mkdir -p "$XDG_RUNTIME_DIR" -m 700
 ln -sf "${real_wayland}" "$XDG_RUNTIME_DIR"
