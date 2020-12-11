@@ -5,7 +5,7 @@ set -x
 if [ "$(snapctl get daemon)" = "true" ]
 then exec "$@"
 else
-  # It is unlikely, but possible "snapctl stop ..." to fail
+  # It is unlikely, but possible for "snapctl stop ..." to fail
   # temporarily (e.g. during install/refresh).
   # Handle failure by ignoring it: it will work next retry.
   # NB We don't move the logic to a `configure` hook, as that
