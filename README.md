@@ -6,7 +6,7 @@ Sprinkle this in your mir-kiosk-XXX snap/snapcraft.yaml
   mir-kiosk-snap-launch:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
-    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl pulseaudio wayland
+    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland
     stage-packages:
       - inotify-tools
 ```
