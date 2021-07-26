@@ -12,7 +12,7 @@ Sprinkle this in your mir-kiosk-XXX snap/snapcraft.yaml
 ```
 
 Where you put the plugs you need for your snap in the `override-build:` command.
-_Note: Optional plugs should **not** be listed here: These plugs will connected by the `/snap/mir-kiosk-XXX/current/bin/setup.sh` script and checked for by the `wayland-launch` script before trying to launch your app._
+_Note: Optional plugs should **not** be listed here: These plugs will be connected by the `/snap/mir-kiosk-XXX/current/bin/setup.sh` script and checked for by the `wayland-launch` script before trying to launch your app._
 
 You use this to launch your app as follows:
 
