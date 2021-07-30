@@ -2,6 +2,10 @@
 set -e
 
 snap_connect() {
+  if snap connections | grep --quiet "$1:$2"; then
+    return 0
+  fi
+
   available_providers="$(snap interface $2 | sed -e '1,/slots:/d')"
   for PROVIDER in snapd ubuntu-frame mir-kiosk; do
      if echo "$available_providers" | grep --quiet "\- ${PROVIDER}"; then
