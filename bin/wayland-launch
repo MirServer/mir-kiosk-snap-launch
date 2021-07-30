@@ -1,12 +1,10 @@
 #!/bin/sh
 set -e
-set -x
 
 for PLUG in %PLUGS%; do
   if ! snapctl is-connected ${PLUG}
   then
-    echo "${PLUG} interface not connected! Please run: /snap/%SNAP%/current/bin/setup.sh"
-    exit 1
+    echo "WARNING: ${PLUG} interface not connected! Please run: /snap/%SNAP%/current/bin/setup.sh"
   fi
 done
 
