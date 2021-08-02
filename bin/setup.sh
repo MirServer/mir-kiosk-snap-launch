@@ -19,5 +19,5 @@ snap_connect_harder() {
 }
 
 for PLUG in %PLUGS%; do
-  sudo snap connect "%SNAP%:${PLUG}" || snap_connect_harder ${PLUG}
+  sudo snap connect "%SNAP%:${PLUG}" 2> /dev/null || snap_connect_harder ${PLUG}
 done
