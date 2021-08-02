@@ -1,30 +1,23 @@
 #!/bin/sh
 set -e
 
-snap_connect() {
-  if snap connections | grep --quiet "[[:space:]]:$2"; then
-    # Where there's a system slot use it
-    sudo snap connect "$1:$2"
-  else
-    # Otherwise note the available slot providers
-    available_providers="$(snap interface "$2" | sed -e '1,/slots:/d')"
+snap_connect_harder() {
+  # Note the available slot providers
+  available_providers="$(snap interface "$1" | sed -e '1,/slots:/d')"
 
-    # For wayland try some well known providers
-    if [ "wayland" = "$2" ]; then
-      for PROVIDER in ubuntu-frame mir-kiosk; do
-         if echo "$available_providers" | grep --quiet "\- ${PROVIDER}"; then
-           sudo snap connect "$1:$2" "${PROVIDER}:$2"
-           return 0
-         fi
-      done
-    fi
-
-    echo "Warning: Failed to connect '$2'. Please connect manually, available providers are:\n$available_providers"
+  # For wayland try some well known providers
+  if [ "wayland" = "$1" ]; then
+    for PROVIDER in ubuntu-frame mir-kiosk; do
+       if echo "$available_providers" | grep --quiet "\- ${PROVIDER}"; then
+         sudo snap connect "%SNAP%:$1" "${PROVIDER}:$1"
+         return 0
+       fi
+    done
   fi
+
+  echo "Warning: Failed to connect '$1'. Please connect manually, available providers are:\n$available_providers"
 }
 
 for PLUG in %PLUGS%; do
-  if ! snap connections | grep --quiet "%SNAP%:${PLUG}"; then
-    snap_connect %SNAP% ${PLUG}
-  fi
+  sudo snap connect "%SNAP%:${PLUG}" || snap_connect_harder ${PLUG}
 done
