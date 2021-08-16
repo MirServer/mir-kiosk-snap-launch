@@ -3,7 +3,11 @@ set -e
 
 snap_connect_harder() {
   # Note the available slot providers
-  available_providers="$(snap interface "$1" | sed -e '1,/slots:/d')"
+  if ! snap connections %SNAP% | grep --quiet "^content.*%SNAP%:$1.*$"; then
+    available_providers="$(snap interface "$1" | sed -e '1,/slots:/d')"
+  else
+    available_providers="$(snap interface content | sed -e '1,/slots:/d' | grep "$1")"
+  fi
 
   # For wayland try some well known providers
   if [ "wayland" = "$1" ]; then
@@ -19,5 +23,7 @@ snap_connect_harder() {
 }
 
 for PLUG in %PLUGS%; do
-  sudo snap connect "%SNAP%:${PLUG}" 2> /dev/null || snap_connect_harder ${PLUG}
+  if ! snap connections %SNAP% | grep --quiet "^.*%SNAP%:${PLUG}.*${PLUG}.*$"; then
+    sudo snap connect "%SNAP%:${PLUG}" 2> /dev/null || snap_connect_harder ${PLUG}
+  fi
 done
