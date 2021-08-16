@@ -3,7 +3,7 @@ set -e
 
 snap_connect_harder() {
   # Note the available slot providers
-  if ! snap connections %SNAP% | grep --quiet "^content\[$1\].*%SNAP%:$1.*$"; then
+  if ! snap connections %SNAP% | grep --quiet "^content.*%SNAP%:$1.*$"; then
     available_providers="$(snap interface "$1" | sed -e '1,/slots:/d')"
   else
     available_providers="$(snap interface content | sed -e '1,/slots:/d' | grep "$1")"
