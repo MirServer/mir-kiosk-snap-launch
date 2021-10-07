@@ -8,27 +8,24 @@ for PLUG in %PLUGS%; do
   fi
 done
 
+wait_for()
+{
+  until
+    inotifywait --event create "$(dirname "$1")"&
+    inotify_pid=$!
+    [ -O "$1" ]
+  do
+    wait "${inotify_pid}"
+  done
+  kill "${inotify_pid}"
+}
+
 real_xdg_runtime_dir=$(dirname "${XDG_RUNTIME_DIR}")
 real_wayland=${real_xdg_runtime_dir}/${WAYLAND_DISPLAY:-wayland-0}
 
-if [ ! -O "${real_wayland}" ]; then
-  # On core systems mir-kiosk may also need to create the host XDG_RUNTIME_DIR
-  if [ ! -O "${real_xdg_runtime_dir}" ]; then
-    echo waiting for host XDG_RUNTIME_DIR...
-    until [ -O "${real_xdg_runtime_dir}" ]
-    do
-      inotifywait --event create "$(dirname "${real_xdg_runtime_dir}")" || sleep 4
-    done
-  fi
-
-  echo waiting for Wayland socket...
-  until [ -O "${real_wayland}" ]
-  do
-    inotifywait --event create "$(dirname "${real_wayland}")" || sleep 4
-  done
-
-  echo "...waiting done"
-fi
+# On core systems may need to wait for real XDG_RUNTIME_DIR
+wait_for "${real_xdg_runtime_dir}"
+wait_for "${real_wayland}"
 
 mkdir -p "$XDG_RUNTIME_DIR" -m 700
 ln -sf "${real_wayland}" "$XDG_RUNTIME_DIR"
