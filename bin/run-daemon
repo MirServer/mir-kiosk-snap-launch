@@ -2,7 +2,7 @@
 
 set -x
 
-if [ "$(snapctl get daemon)" = "true" ]
+if [ "$(snapctl get daemon)" = "true" ] || [ "$(id -u)" != "0" ]
 then exec "$@"
 else
   # It is unlikely, but possible for "snapctl stop ..." to fail
