@@ -10,5 +10,5 @@ else
   # Handle failure by ignoring it: it will work next retry.
   # NB We don't move the logic to a `configure` hook, as that
   # might conflict with any downstream snaps.
-  snapctl stop $SNAP_NAME.daemon || true
+  snapctl stop $SNAP_INSTANCE_NAME.daemon || true
 fi
